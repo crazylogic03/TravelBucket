@@ -1,0 +1,47 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-color: #4A90E2;
+  /* Soft blue */
+  --secondary-color: #2ECC71;
+  /* Fresh green */
+  --accent-color: #FF9966;
+  /* Warm orange */
+  --text-color: #0D213D;
+  /* Dark, readable text */
+  --background-color: #F9FAFC;
+  /* Light background */
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Smooth fonts on macOS */
+  color: var(--text-color);
+  /* Use custom text color */
+  background-color: var(--background-color);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Montserrat', sans-serif;
+  line-height: 1.2;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
