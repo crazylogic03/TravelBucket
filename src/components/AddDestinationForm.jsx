@@ -5,6 +5,7 @@ import { useAppContext } from '../context/AppContext';
 import { fetchUnsplashImage } from '../utils/unsplash';
 import { fetchCoordinates } from '../utils/geocode';
 import { useEffect } from 'react';
+import Footer from './Footer';
 
 function AddDestinationForm({ onSuccess }) {
   const { addDestination } = useAppContext();
