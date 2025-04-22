@@ -3,6 +3,8 @@ import { motion } from 'framer-motion';
 import { IoCloudUploadOutline, IoImageOutline, IoLocationOutline, IoCloseCircleOutline } from 'react-icons/io5';
 import { useAppContext } from '../context/AppContext';
 import { fetchUnsplashImage } from '../utils/unsplash';
+import { fetchCoordinates } from '../utils/geocode';
+import { useEffect } from 'react';
 
 function AddDestinationForm({ onSuccess }) {
   const { addDestination } = useAppContext();
@@ -20,6 +22,30 @@ function AddDestinationForm({ onSuccess }) {
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
   const [fetchingImage, setFetchingImage] = useState(false);
+
+  useEffect(() => {
+    const fetchLatLng = async () => {
+      const { city, country } = formData;
+      if (!city && !country) return;
+
+      const location = `${city} ${country}`.trim();
+      const coords = await fetchCoordinates(location);
+      if (coords) {
+        setFormData(prev => ({
+          ...prev,
+          lat: coords.lat,
+          lng: coords.lng
+        }));
+      }
+    };
+
+    // Debounce to avoid calling on every keystroke
+    const timeout = setTimeout(fetchLatLng, 800);
+
+    return () => clearTimeout(timeout);
+  }, [formData.city, formData.country]);
+
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
