@@ -50,33 +50,9 @@ function ChangeMapView({ center }) {
 
 function MapView({ selectedDestination, onSelect }) {
   const { destinations } = useAppContext()
-  const [mapCenter, setMapCenter] = useState([20.5937, 78.9629]) // Default to India
-  const [zoom, setZoom] = useState(5) // Appropriate zoom for India
+  const [mapCenter, setMapCenter] = useState([20, 0])
+  const [zoom, setZoom] = useState(2)
   const [sidebarDestination, setSidebarDestination] = useState(null)
-
-  // Get user's current location
-  useEffect(() => {
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const { latitude, longitude } = position.coords
-          setMapCenter([latitude, longitude])
-          setZoom(10) // Adjust zoom to a more detailed view
-        },
-        (error) => {
-          console.error("Error getting geolocation:", error)
-          // Fallback to India if geolocation fails
-          setMapCenter([20.5937, 78.9629])
-          setZoom(5)
-        }
-      )
-    } else {
-      console.error("Geolocation is not supported by this browser.")
-      // Fallback to India if geolocation is not supported
-      setMapCenter([20.5937, 78.9629])
-      setZoom(5)
-    }
-  }, [])
 
   // Update map center when selected destination changes
   useEffect(() => {
