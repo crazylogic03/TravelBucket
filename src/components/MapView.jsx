@@ -35,7 +35,7 @@ const bucketListIcon = new L.Icon({
 // Component to recenter map when selected destination changes
 function ChangeMapView({ center }) {
   const map = useMap()
-  
+
   useEffect(() => {
     if (center) {
       map.flyTo(center, 10, {
@@ -44,16 +44,40 @@ function ChangeMapView({ center }) {
       })
     }
   }, [center, map])
-  
+
   return null
 }
 
 function MapView({ selectedDestination, onSelect }) {
   const { destinations } = useAppContext()
-  const [mapCenter, setMapCenter] = useState([20, 0])
-  const [zoom, setZoom] = useState(2)
+  const [mapCenter, setMapCenter] = useState([20.5937, 78.9629]) // Default to India
+  const [zoom, setZoom] = useState(5) // Appropriate zoom for India
   const [sidebarDestination, setSidebarDestination] = useState(null)
-  
+
+  // Get user's current location
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords
+          setMapCenter([latitude, longitude])
+          setZoom(10) // Adjust zoom to a more detailed view
+        },
+        (error) => {
+          console.error("Error getting geolocation:", error)
+          // Fallback to India if geolocation fails
+          setMapCenter([20.5937, 78.9629])
+          setZoom(5)
+        }
+      )
+    } else {
+      console.error("Geolocation is not supported by this browser.")
+      // Fallback to India if geolocation is not supported
+      setMapCenter([20.5937, 78.9629])
+      setZoom(5)
+    }
+  }, [])
+
   // Update map center when selected destination changes
   useEffect(() => {
     if (selectedDestination && selectedDestination.lat && selectedDestination.lng) {
@@ -62,19 +86,19 @@ function MapView({ selectedDestination, onSelect }) {
       setSidebarDestination(selectedDestination)
     }
   }, [selectedDestination])
-  
+
   // Filter destinations with coordinates
   const validDestinations = destinations.filter(
     dest => dest.lat && dest.lng && !isNaN(dest.lat) && !isNaN(dest.lng)
   )
-  
+
   const handleMarkerClick = (destination) => {
     setSidebarDestination(destination)
     if (onSelect) {
       onSelect(destination)
     }
   }
-  
+
   const closeSidebar = () => {
     setSidebarDestination(null)
     if (onSelect) {
@@ -85,18 +109,18 @@ function MapView({ selectedDestination, onSelect }) {
   return (
     <div className="h-full flex flex-col md:flex-row">
       <div className="h-[60vh] md:h-full md:flex-grow">
-        <MapContainer 
-          center={mapCenter} 
-          zoom={zoom} 
+        <MapContainer
+          center={mapCenter}
+          zoom={zoom}
           className="h-full w-full"
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          
+
           {validDestinations.map(dest => (
-            <Marker 
+            <Marker
               key={dest.id}
               position={[dest.lat, dest.lng]}
               icon={dest.visited ? visitedIcon : bucketListIcon}
@@ -117,15 +141,15 @@ function MapView({ selectedDestination, onSelect }) {
               </Popup>
             </Marker>
           ))}
-          
+
           <ChangeMapView center={mapCenter} />
         </MapContainer>
       </div>
-      
+
       {sidebarDestination && (
         <div className="md:w-1/3 lg:w-1/4 bg-white shadow-lg md:shadow-none md:border-l border-neutral-200 overflow-auto">
-          <DestinationDetail 
-            destination={sidebarDestination} 
+          <DestinationDetail
+            destination={sidebarDestination}
             onClose={closeSidebar}
           />
         </div>
