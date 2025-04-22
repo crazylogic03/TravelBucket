@@ -1,6 +1,6 @@
-import axios from 'axios'
+import axios from 'axios';
 
-const UNSPLASH_ACCESS_KEY = 'oLHTeOpJrMWyDOdAhft1oLn2eI5cbTO05U8YR76H_fc'
+const UNSPLASH_ACCESS_KEY = 'oLHTeOpJrMWyDOdAhft1oLn2eI5cbTO05U8YR76H_fc';
 
 export const fetchUnsplashImage = async (query) => {
   try {
@@ -8,20 +8,21 @@ export const fetchUnsplashImage = async (query) => {
       params: {
         query,
         per_page: 1,
-        orientation: 'landscape'
+        orientation: 'landscape',
       },
       headers: {
-        Authorization: `Client-ID ${oLHTeOpJrMWyDOdAhft1oLn2eI5cbTO05U8YR76H_fc}`
-      }
-    })
+        Authorization: `Client-ID ${UNSPLASH_ACCESS_KEY}`,
+      },
+    });
 
     if (response.data.results.length > 0) {
-      return response.data.results[0].urls.regular
+      return response.data.results[0].urls.regular;
     }
 
-    return null
+    return null;
   } catch (error) {
-    console.error('Error fetching image from Unsplash:', error)
-    return null
+    console.error('Error fetching image from Unsplash:', error);
+    return null;
   }
-}
+};
+
