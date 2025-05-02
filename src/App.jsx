@@ -7,7 +7,7 @@ import DestinationList from './components/DestinationList'
 import AddDestinationForm from './components/AddDestinationForm'
 import ProgressStats from './components/ProgressStats'
 import { useAppContext } from './context/AppContext'
-import Footer from './components/Footer' // Import Footer Component
+import Footer from './components/Footer'
 
 function App() {
   const { destinations } = useAppContext()
