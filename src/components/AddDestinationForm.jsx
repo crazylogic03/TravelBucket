@@ -6,6 +6,8 @@ import { fetchUnsplashImage } from '../utils/unsplash';
 import { fetchCoordinates } from '../utils/geocode';
 import { useEffect } from 'react';
 import Footer from './Footer';
+import { aiRecommend } from "../utils/ai"
+
 
 function AddDestinationForm({ onSuccess }) {
   const { addDestination } = useAppContext();
@@ -15,10 +17,13 @@ function AddDestinationForm({ onSuccess }) {
     description: '',
     whyVisit: '',
     tags: '',
+    places: [],
+    famousThings: [],
     lat: '',
     lng: '',
     imageUrl: ''
-  });
+  })
+
   const [localImage, setLocalImage] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errors, setErrors] = useState({});
@@ -45,6 +50,30 @@ function AddDestinationForm({ onSuccess }) {
 
     return () => clearTimeout(timeout);
   }, [formData.city, formData.country]);
+
+  const handleAIRecommend = async () => {
+    if (!formData.city || !formData.country) return
+
+    setIsLoading(true)
+
+    try {
+      const ai = await aiRecommend(formData.city, formData.country)
+
+      setFormData(prev => ({
+        ...prev,
+        description: ai.description,
+        whyVisit: ai.whyVisit,
+        tags: ai.tags.join(", "),
+        places: ai.places || [],
+        famousThings: ai.famousThings || []
+      }))
+    } catch (err) {
+      console.error("AI error:", err)
+      alert("AI failed. Try again.")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
 
 
@@ -365,6 +394,15 @@ function AddDestinationForm({ onSuccess }) {
                     >
                       {fetchingImage ? 'Fetching...' : 'Fetch from Unsplash'}
                     </button>
+
+                    <button
+                      type="button"
+                      onClick={handleAIRecommend}
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-accent-500 text-white text-sm font-medium rounded-lg hover:bg-accent-600"
+                    >
+                      ✨ AI Suggest
+                    </button>
+
                   </div>
 
                   {/* Error Messages */}

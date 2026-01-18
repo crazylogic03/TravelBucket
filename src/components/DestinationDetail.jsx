@@ -6,14 +6,14 @@ import TimeInfo from './TimeInfo'
 
 function DestinationDetail({ destination, onClose }) {
   const { toggleVisited } = useAppContext()
-  
+
   const handleToggleVisited = () => {
     toggleVisited(destination.id)
   }
-  
+
   // Set a default image if none is provided
   const imageUrl = destination.imageUrl || 'https://images.unsplash.com/photo-1500835556837-99ac94a94552?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80'
-  
+
   return (
     <motion.div
       initial={{ x: 100, opacity: 0 }}
@@ -24,8 +24,8 @@ function DestinationDetail({ destination, onClose }) {
     >
       {/* Header with image */}
       <div className="relative h-48">
-        <img 
-          src={imageUrl} 
+        <img
+          src={imageUrl}
           alt={destination.city || destination.country}
           className="w-full h-full object-cover"
         />
@@ -35,9 +35,9 @@ function DestinationDetail({ destination, onClose }) {
             <p className="text-sm opacity-90">{destination.country}</p>
           </div>
         </div>
-        
+
         {/* Close button */}
-        <button 
+        <button
           onClick={onClose}
           className="absolute top-3 right-3 bg-white bg-opacity-80 hover:bg-opacity-100 text-neutral-700 p-1.5 rounded-full transition-colors"
           aria-label="Close details"
@@ -45,7 +45,7 @@ function DestinationDetail({ destination, onClose }) {
           <IoCloseOutline className="text-xl" />
         </button>
       </div>
-      
+
       {/* Content */}
       <div className="p-4 flex-grow overflow-auto">
         {/* Visited status */}
@@ -58,24 +58,23 @@ function DestinationDetail({ destination, onClose }) {
           </div>
           <button
             onClick={handleToggleVisited}
-            className={`px-3 py-1 text-xs rounded-full transition-colors ${
-              destination.visited 
-                ? 'bg-neutral-100 hover:bg-neutral-200 text-neutral-700' 
-                : 'bg-secondary-100 hover:bg-secondary-200 text-secondary-700'
-            }`}
+            className={`px-3 py-1 text-xs rounded-full transition-colors ${destination.visited
+              ? 'bg-neutral-100 hover:bg-neutral-200 text-neutral-700'
+              : 'bg-secondary-100 hover:bg-secondary-200 text-secondary-700'
+              }`}
           >
             {destination.visited ? 'Mark as not visited' : 'Mark as visited'}
           </button>
         </div>
-        
+
         {/* Tags */}
         {destination.tags && destination.tags.length > 0 && (
           <div className="mb-4">
             <h3 className="text-sm font-medium text-neutral-700 mb-2">Tags</h3>
             <div className="flex flex-wrap gap-1">
               {destination.tags.map((tag, idx) => (
-                <span 
-                  key={idx} 
+                <span
+                  key={idx}
                   className="inline-block bg-primary-100 text-primary-700 text-xs px-2 py-1 rounded-full"
                 >
                   {tag}
@@ -84,7 +83,7 @@ function DestinationDetail({ destination, onClose }) {
             </div>
           </div>
         )}
-        
+
         {/* Description */}
         {destination.description && (
           <div className="mb-4">
@@ -94,7 +93,7 @@ function DestinationDetail({ destination, onClose }) {
             </p>
           </div>
         )}
-        
+
         {/* Why visit */}
         {destination.whyVisit && (
           <div className="mb-4">
@@ -104,7 +103,35 @@ function DestinationDetail({ destination, onClose }) {
             </p>
           </div>
         )}
-        
+        {destination.places && destination.places.length > 0 && (
+          <div className="mb-4">
+            <h3 className="text-sm font-medium text-neutral-700 mb-2">
+              Places & Best Time to Visit
+            </h3>
+            <ul className="space-y-1 text-sm text-neutral-600">
+              {destination.places.map((place, idx) => (
+                <li key={idx}>
+                  <strong>{place.name}</strong> – {place.bestTime}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        {destination.famousThings && destination.famousThings.length > 0 && (
+          <div className="mb-4">
+            <h3 className="text-sm font-medium text-neutral-700 mb-2">
+              Famous For
+            </h3>
+            <ul className="list-disc list-inside text-sm text-neutral-600">
+              {destination.famousThings.map((item, idx) => (
+                <li key={idx}>{item}</li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+
+
         {/* Weather and time */}
         {destination.lat && destination.lng && (
           <div className="mt-6 space-y-4">
@@ -116,7 +143,7 @@ function DestinationDetail({ destination, onClose }) {
                 </div>
                 <WeatherInfo lat={destination.lat} lng={destination.lng} />
               </div>
-              
+
               <div className="bg-neutral-50 rounded-lg p-3">
                 <div className="flex items-center mb-2">
                   <IoTimeOutline className="text-primary-500 mr-1" />

@@ -1,9 +1,9 @@
 import { motion } from 'framer-motion'
-import { 
-  IoEarthOutline, 
-  IoCheckmarkCircleOutline, 
-  IoLocationOutline, 
-  IoTimeOutline 
+import {
+  IoEarthOutline,
+  IoCheckmarkCircleOutline,
+  IoLocationOutline,
+  IoTimeOutline
 } from 'react-icons/io5'
 import { useAppContext } from '../context/AppContext'
 
@@ -11,7 +11,7 @@ function ProgressStats() {
   const { getProgressStats, getUniqueCountriesCount, destinations } = useAppContext()
   const { total, visited, percentage } = getProgressStats()
   const uniqueCountries = getUniqueCountriesCount()
-  
+
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -22,16 +22,16 @@ function ProgressStats() {
       }
     }
   }
-  
+
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
     show: { opacity: 1, y: 0 }
   }
-  
+
   if (total === 0) {
     return null
   }
-  
+
   return (
     <motion.div
       variants={containerVariants}
@@ -40,9 +40,9 @@ function ProgressStats() {
       className="bg-white rounded-xl shadow-card p-6 mb-6"
     >
       <h2 className="text-xl font-display font-medium text-neutral-800 mb-4">Your Progress</h2>
-      
+
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <motion.div 
+        <motion.div
           variants={itemVariants}
           className="bg-neutral-50 rounded-lg p-4 flex items-center"
         >
@@ -54,8 +54,8 @@ function ProgressStats() {
             <p className="text-xl font-medium text-neutral-800">{total}</p>
           </div>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           variants={itemVariants}
           className="bg-neutral-50 rounded-lg p-4 flex items-center"
         >
@@ -67,8 +67,8 @@ function ProgressStats() {
             <p className="text-xl font-medium text-neutral-800">{visited}</p>
           </div>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           variants={itemVariants}
           className="bg-neutral-50 rounded-lg p-4 flex items-center"
         >
@@ -80,8 +80,8 @@ function ProgressStats() {
             <p className="text-xl font-medium text-neutral-800">{percentage}%</p>
           </div>
         </motion.div>
-        
-        <motion.div 
+
+        <motion.div
           variants={itemVariants}
           className="bg-neutral-50 rounded-lg p-4 flex items-center"
         >
@@ -94,7 +94,7 @@ function ProgressStats() {
           </div>
         </motion.div>
       </div>
-      
+
       {/* Progress bar */}
       <div className="mt-6">
         <div className="flex justify-between text-sm text-neutral-600 mb-2">
@@ -102,7 +102,7 @@ function ProgressStats() {
           <span>{total - visited} remaining</span>
         </div>
         <div className="h-3 bg-neutral-100 rounded-full overflow-hidden">
-          <motion.div 
+          <motion.div
             initial={{ width: 0 }}
             animate={{ width: `${percentage}%` }}
             transition={{ duration: 1, ease: "easeOut" }}
