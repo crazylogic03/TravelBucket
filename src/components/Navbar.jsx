@@ -40,9 +40,9 @@ function Navbar({ activeView, onViewChange }) {
               initial={{ x: -20, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-xl font-display font-bold text-neutral-900"
+              className="text-xl font-display font-extrabold text-neutral-900"
             >
-              Travel <span className="text-primary-500">Bucket List</span>
+              YO<span className="text-primary-500">LO</span>
             </motion.h1>
           </div>
 
