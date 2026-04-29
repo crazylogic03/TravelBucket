@@ -47,7 +47,7 @@ function Navbar({ activeView, onViewChange }) {
           </div>
 
           <nav aria-label="Main Navigation" className="flex justify-center md:justify-end">
-            <ul className="flex bg-neutral-100 rounded-lg p-1 shadow-sm">
+            <ul aria-label="View options" className="flex bg-neutral-100 rounded-lg p-1 shadow-sm">
               <li>
                 <button
                   onClick={() => onViewChange('list')}
