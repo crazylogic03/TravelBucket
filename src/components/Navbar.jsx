@@ -46,7 +46,7 @@ function Navbar({ activeView, onViewChange }) {
             </motion.h1>
           </div>
 
-          <nav className="flex justify-center md:justify-end">
+          <nav aria-label="Main Navigation" className="flex justify-center md:justify-end">
             <ul className="flex bg-neutral-100 rounded-lg p-1 shadow-sm">
               <li>
                 <button
