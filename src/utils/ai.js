@@ -1,4 +1,4 @@
-const GEMINI_KEY = import.meta.env.VITE_GEMINI_API_KEY
+const GROQ_KEY = import.meta.env.VITE_GROQ_API_KEY
 
 export async function aiRecommend(city, country) {
   const prompt = `
@@ -26,24 +26,30 @@ Respond ONLY in valid JSON.
 `
 
   const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${GEMINI_KEY}`,
+    "https://api.groq.com/openai/v1/chat/completions",
     {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${GROQ_KEY}`,
+      },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }],
+        model: "llama-3.3-70b-versatile",
+        messages: [{ role: "user", content: prompt }],
+        temperature: 0.7,
+        response_format: { type: "json_object" },
       }),
     }
   )
 
   if (!res.ok) {
     const err = await res.text()
-    console.error("Gemini error:", err)
-    throw new Error("Gemini request failed")
+    console.error("Groq error:", err)
+    throw new Error("Groq request failed")
   }
 
   const data = await res.json()
-  let text = data?.candidates?.[0]?.content?.parts?.[0]?.text
+  let text = data?.choices?.[0]?.message?.content
 
   // Clean up markdown code blocks if present
   text = text.replace(/```json/g, "").replace(/```/g, "").trim()
