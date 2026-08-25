@@ -1,4 +1,4 @@
-<![CDATA[# 🌍 YOLO — Your Travel Bucket List App
+# 🌍 YOLO — Your Travel Bucket List App
 
 **YOLO** (You Only Live Once) is a feature-rich, AI-powered travel bucket list web application built with React. Plan your dream destinations, visualize them on an interactive map, track your travel progress, and get AI-generated recommendations — all in one beautiful interface.
 
@@ -347,4 +347,3 @@ Contributions, issues, and feature requests are welcome! Feel free to check the 
 - [OpenWeatherMap](https://openweathermap.org/) — Weather data API
 - [OpenStreetMap](https://www.openstreetmap.org/) — Map tiles & geocoding
 - [React Icons](https://react-icons.github.io/react-icons/) — Icon library
-]]>
