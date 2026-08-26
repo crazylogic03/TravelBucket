@@ -1,0 +1,471 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum TripStatus {
+  DRAFT
+  PLANNED
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum TransportMode {
+  FLIGHT
+  TRAIN
+  BUS
+  CAR
+  BIKE
+}
+
+enum DestinationStatus {
+  PLANNED
+  CURRENT
+  VISITED
+  SKIPPED
+}
+
+enum BookingType {
+  FLIGHT
+  TRAIN
+  BUS
+  HOTEL
+  OTHER
+}
+
+enum BookingStatus {
+  PLANNED
+  PENDING
+  CONFIRMED
+  CANCELLED
+}
+
+enum ExpenseCategory {
+  TRANSPORT
+  HOTEL
+  FOOD
+  ACTIVITY
+  SHOPPING
+  OTHER
+}
+
+enum TripEventType {
+  TRIP_CREATED
+  TRIP_PLANNED
+  TRIP_STARTED
+  DESTINATION_CURRENT
+  DESTINATION_VISITED
+  DESTINATION_SKIPPED
+  EXPENSE_ADDED
+  EXPENSE_UPDATED
+  EXPENSE_DELETED
+  ITINERARY_REPLANNED
+  TRIP_COMPLETED
+}
+
+enum ChatRole {
+  USER
+  ASSISTANT
+  TOOL
+}
+
+enum ChatMode {
+  PLANNING
+  ACTIVE_TRIP
+  GENERAL
+}
+
+enum PaymentStatus {
+  CREATED
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUNDED
+}
+
+enum AiRunStatus {
+  STARTED
+  SUCCESS
+  FAILED
+  FALLBACK
+}
+
+enum ItineraryItemType {
+  ACTIVITY
+  TRANSPORT
+  MEAL
+  HOTEL
+  FREE_TIME
+  OTHER
+}
+
+// ─── User & Session ──────────────────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(uuid())
+  googleId     String?  @unique
+  email        String   @unique
+  name         String
+  avatarUrl    String?
+  passwordHash String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  sessions           Session[]
+  trips              Trip[]
+  bookings           Booking[]
+  expenses           Expense[]
+  tripEvents         TripEvent[]
+  chatSessions       ChatSession[]
+  payments           Payment[]
+  aiRuns             AiRun[]
+  settings           UserSettings?
+  passwordResetTokens PasswordResetToken[]
+
+  @@index([email])
+  @@index([googleId])
+}
+
+model Session {
+  id         String   @id @default(uuid())
+  userId     String
+  tokenHash  String   @unique
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  lastSeenAt DateTime @default(now())
+  userAgent  String?
+  ipHash     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tokenHash])
+  @@index([userId])
+}
+
+model UserSettings {
+  id                      String   @id @default(uuid())
+  userId                  String   @unique
+  currency                String   @default("INR")
+  distanceUnit            String   @default("km")
+  timeFormat              String   @default("24h")
+  preferredTransport      String?
+  typicalTripLengthDays   Int?
+  preferredBudgetMin      Decimal? @db.Decimal(12, 2)
+  preferredBudgetMax      Decimal? @db.Decimal(12, 2)
+  travelInterests         Json?
+  notifyTripReminders     Boolean  @default(true)
+  notifyBudgetAlerts      Boolean  @default(true)
+  notifyAiUpdates         Boolean  @default(true)
+  notifyTravelAlerts      Boolean  @default(true)
+  aiPersonalization       Boolean  @default(true)
+  aiRecommendationStyle   String   @default("balanced")
+  theme                   String   @default("system")
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  tokenHash String   @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+}
+
+// ─── Trip ─────────────────────────────────────────────────────────────────────
+
+model Trip {
+  id                   String        @id @default(uuid())
+  userId               String
+  title                String
+  startLocationName    String
+  startLatitude        Float
+  startLongitude       Float
+  destinationName      String
+  destinationLatitude  Float
+  destinationLongitude Float
+  startDate            DateTime      @db.Date
+  endDate              DateTime      @db.Date
+  numberOfDays         Int
+  travelerCount        Int
+  budgetAmount         Decimal       @db.Decimal(12, 2)
+  currency             String        @default("INR")
+  transportMode        TransportMode?
+  status               TripStatus    @default(DRAFT)
+  progressPercentage   Float         @default(0)
+  startedAt            DateTime?
+  completedAt          DateTime?
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
+
+  user         User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  preference   TripPreference?
+  destinations Destination[]
+  itineraryDays ItineraryDay[]
+  bookings     Booking[]
+  expenses     Expense[]
+  tripEvents   TripEvent[]
+  chatSessions ChatSession[]
+  payments     Payment[]
+  aiRuns       AiRun[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+model TripPreference {
+  id          String   @id @default(uuid())
+  tripId      String   @unique
+  nature      Boolean  @default(false)
+  culture     Boolean  @default(false)
+  food        Boolean  @default(false)
+  adventure   Boolean  @default(false)
+  photography Boolean  @default(false)
+  relaxation  Boolean  @default(false)
+  shopping    Boolean  @default(false)
+  nightlife   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+}
+
+// ─── Destinations ────────────────────────────────────────────────────────────
+
+model Destination {
+  id                       String            @id @default(uuid())
+  tripId                   String
+  name                     String
+  description              String            @default("")
+  famousFor                String?
+  bestTime                 String?
+  latitude                 Float
+  longitude                Float
+  recommendedDurationMinutes Int             @default(60)
+  estimatedCost            Decimal?          @db.Decimal(12, 2)
+  routeRelevanceScore      Float?
+  preferenceMatchScore     Float?
+  recommendationReason     String?
+  imageUrl                 String?
+  status                   DestinationStatus @default(PLANNED)
+  sortOrder                Int               @default(0)
+  selected                 Boolean           @default(false)
+  visitedAt                DateTime?
+  skippedAt                DateTime?
+  skipReason               String?
+  createdAt                DateTime          @default(now())
+  updatedAt                DateTime          @updatedAt
+
+  trip           Trip            @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  itineraryItems ItineraryItem[]
+
+  @@index([tripId])
+  @@index([status])
+}
+
+// ─── Itinerary ───────────────────────────────────────────────────────────────
+
+model ItineraryDay {
+  id            String   @id @default(uuid())
+  tripId        String
+  dayNumber     Int
+  date          DateTime @db.Date
+  title         String?
+  notes         String?
+  estimatedCost Decimal? @db.Decimal(12, 2)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  trip  Trip            @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  items ItineraryItem[]
+
+  @@unique([tripId, dayNumber])
+  @@index([tripId])
+}
+
+model ItineraryItem {
+  id              String            @id @default(uuid())
+  itineraryDayId  String
+  destinationId   String?
+  type            ItineraryItemType @default(ACTIVITY)
+  title           String
+  description     String?
+  startTime       String?
+  endTime         String?
+  durationMinutes Int?
+  latitude        Float?
+  longitude       Float?
+  estimatedCost   Decimal?          @db.Decimal(12, 2)
+  sortOrder       Int               @default(0)
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  itineraryDay ItineraryDay @relation(fields: [itineraryDayId], references: [id], onDelete: Cascade)
+  destination  Destination? @relation(fields: [destinationId], references: [id], onDelete: SetNull)
+
+  @@index([itineraryDayId])
+}
+
+// ─── Bookings ────────────────────────────────────────────────────────────────
+
+model Booking {
+  id                String        @id @default(uuid())
+  tripId            String
+  userId            String
+  type              BookingType
+  provider          String
+  externalReference String?
+  title             String
+  departureLocation String?
+  arrivalLocation   String?
+  departureAt       DateTime?
+  arrivalAt         DateTime?
+  amount            Decimal?      @db.Decimal(12, 2)
+  currency          String?
+  status            BookingStatus @default(PLANNED)
+  bookingUrl        String?
+  metadata          Json?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
+}
+
+// ─── Expenses ────────────────────────────────────────────────────────────────
+
+model Expense {
+  id          String          @id @default(uuid())
+  tripId      String
+  userId      String
+  category    ExpenseCategory
+  amount      Decimal         @db.Decimal(12, 2)
+  currency    String          @default("INR")
+  description String
+  expenseDate DateTime        @db.Date
+  latitude    Float?
+  longitude   Float?
+  createdAt   DateTime        @default(now())
+  updatedAt   DateTime        @updatedAt
+
+  trip Trip @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tripId])
+  @@index([userId])
+}
+
+// ─── Trip Events ─────────────────────────────────────────────────────────────
+
+model TripEvent {
+  id        String        @id @default(uuid())
+  tripId    String
+  userId    String?
+  type      TripEventType
+  timestamp DateTime      @default(now())
+  latitude  Float?
+  longitude Float?
+  metadata  Json?
+  createdAt DateTime      @default(now())
+
+  trip Trip  @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@index([tripId])
+  @@index([timestamp])
+}
+
+// ─── Chat ────────────────────────────────────────────────────────────────────
+
+model ChatSession {
+  id        String   @id @default(uuid())
+  tripId    String
+  userId    String
+  mode      ChatMode @default(GENERAL)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  trip     Trip          @relation(fields: [tripId], references: [id], onDelete: Cascade)
+  user     User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages ChatMessage[]
+
+  @@index([tripId])
+}
+
+model ChatMessage {
+  id            String   @id @default(uuid())
+  chatSessionId String
+  role          ChatRole
+  content       String   @db.Text
+  toolCalls     Json?
+  toolResults   Json?
+  createdAt     DateTime @default(now())
+
+  chatSession ChatSession @relation(fields: [chatSessionId], references: [id], onDelete: Cascade)
+
+  @@index([chatSessionId])
+}
+
+// ─── Payments ────────────────────────────────────────────────────────────────
+
+model Payment {
+  id                String        @id @default(uuid())
+  tripId            String?
+  userId            String
+  razorpayOrderId   String        @unique
+  razorpayPaymentId String?       @unique
+  razorpaySignature String?
+  amount            Decimal       @db.Decimal(12, 2)
+  currency          String        @default("INR")
+  status            PaymentStatus @default(CREATED)
+  purpose           String
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  trip Trip? @relation(fields: [tripId], references: [id], onDelete: SetNull)
+  user User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tripId])
+}
+
+// ─── AI Runs ─────────────────────────────────────────────────────────────────
+
+model AiRun {
+  id           String      @id @default(uuid())
+  userId       String?
+  tripId       String?
+  agentType    String
+  model        String
+  provider     String      @default("groq")
+  keyPoolSlot  Int?
+  inputTokens  Int?
+  outputTokens Int?
+  latencyMs    Int?
+  status       AiRunStatus @default(STARTED)
+  errorCode    String?
+  createdAt    DateTime    @default(now())
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  trip Trip? @relation(fields: [tripId], references: [id], onDelete: SetNull)
+
+  @@index([tripId])
+  @@index([createdAt])
+}
