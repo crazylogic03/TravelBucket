@@ -1,0 +1,31 @@
+{
+  "name": "yolo-backend",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "build": "node --check src/server.js && node --check src/app.js",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11.0.2",
+    "@fastify/cors": "^10.0.2",
+    "@fastify/rate-limit": "^10.2.2",
+    "@prisma/client": "^6.3.1",
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^16.4.7",
+    "fastify": "^5.2.1",
+    "google-auth-library": "^9.15.1",
+    "groq-sdk": "^0.15.0",
+    "razorpay": "^2.9.5",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.19.0",
+    "@types/bcryptjs": "^2.4.6",
+    "eslint": "^9.19.0",
+    "globals": "^15.14.0"
+  }
+}
