@@ -1,0 +1,280 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── YOLO semantic theme tokens ─────────────────────────────────────────── */
+
+:root {
+  --background: #f4f2ed;
+  --background-secondary: #ebe8e1;
+  --background-tertiary: #e2ddd4;
+  --surface: #fdfcfa;
+  --surface-elevated: #ffffff;
+  --surface-muted: #f0ece4;
+  --surface-glass: rgba(253, 252, 250, 0.82);
+  --text-primary: #1a2332;
+  --text-secondary: #4a5568;
+  --text-muted: #7a8494;
+  --text-inverse: #fdfcfa;
+  --border: rgba(26, 35, 50, 0.1);
+  --border-subtle: rgba(26, 35, 50, 0.07);
+  --border-strong: rgba(26, 35, 50, 0.16);
+  --brand-primary: #0d9488;
+  --brand-secondary: #0c4a6e;
+  --brand-accent: #6366f1;
+  --brand: var(--brand-primary);
+  --brand-soft: rgba(13, 148, 136, 0.12);
+  --brand-strong: #0c4a6e;
+  --success: #16a34a;
+  --warning: #d97706;
+  --error: #dc2626;
+  --info: #0284c7;
+  --success-soft: rgba(22, 163, 74, 0.12);
+  --warning-soft: rgba(217, 119, 6, 0.12);
+  --error-soft: rgba(220, 38, 38, 0.1);
+  --info-soft: rgba(2, 132, 199, 0.12);
+  --danger: var(--error);
+  --danger-soft: var(--error-soft);
+  --button-primary: linear-gradient(135deg, #0d9488 0%, #0c4a6e 100%);
+  --button-primary-hover: linear-gradient(135deg, #14b8a6 0%, #075985 100%);
+  --button-secondary: var(--surface-elevated);
+  --button-secondary-hover: var(--surface-muted);
+  --shadow-sm: 0 2px 8px rgba(26, 35, 50, 0.06);
+  --shadow-md: 0 8px 24px rgba(26, 35, 50, 0.08);
+  --shadow-lg: 0 16px 40px rgba(26, 35, 50, 0.1);
+  --shadow-soft: var(--shadow-sm);
+  --shadow-card: var(--shadow-md);
+  --shadow-glow-teal: 0 0 32px rgba(13, 148, 136, 0.18);
+  --shadow-glow-ai: 0 0 40px rgba(99, 102, 241, 0.14);
+  --travel-coral: #ea580c;
+  --travel-sky: #0284c7;
+  --ai-accent: var(--brand-accent);
+  --ai-accent-soft: rgba(99, 102, 241, 0.12);
+  --surface-base: var(--background);
+  --surface-raised: var(--surface-elevated);
+  --overlay: rgba(26, 35, 50, 0.45);
+  --live-bg: #e8eef4;
+  --live-panel: #fdfcfa;
+  --live-panel-muted: #f0ece4;
+  --live-text: var(--text-primary);
+  --live-text-muted: var(--text-muted);
+  --live-border: var(--border);
+  --live-chip: rgba(26, 35, 50, 0.06);
+  --live-chip-hover: rgba(26, 35, 50, 0.1);
+  --live-floating: rgba(253, 252, 250, 0.94);
+  --gradient-hero: linear-gradient(135deg, #0c4a6e 0%, #0d9488 50%, #164e63 100%);
+  --gradient-ai: linear-gradient(135deg, #6366f1 0%, #0d9488 100%);
+  color-scheme: light;
+}
+
+.dark {
+  --background: #0f1419;
+  --background-secondary: #151b24;
+  --background-tertiary: #1c2430;
+  --surface: #1a222d;
+  --surface-elevated: #222c3a;
+  --surface-muted: #2a3544;
+  --surface-glass: rgba(26, 34, 45, 0.88);
+  --text-primary: #f1f5f9;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --text-inverse: #fdfcfa;
+  --border: rgba(148, 163, 184, 0.14);
+  --border-subtle: rgba(148, 163, 184, 0.1);
+  --border-strong: rgba(148, 163, 184, 0.24);
+  --brand-primary: #2dd4bf;
+  --brand-secondary: #5eead4;
+  --brand-accent: #818cf8;
+  --brand: var(--brand-primary);
+  --brand-soft: rgba(45, 212, 191, 0.14);
+  --brand-strong: #99f6e4;
+  --success: #4ade80;
+  --warning: #fbbf24;
+  --error: #f87171;
+  --info: #38bdf8;
+  --success-soft: rgba(74, 222, 128, 0.12);
+  --warning-soft: rgba(251, 191, 36, 0.12);
+  --error-soft: rgba(248, 113, 113, 0.12);
+  --info-soft: rgba(56, 189, 248, 0.12);
+  --button-primary: linear-gradient(135deg, #14b8a6 0%, #0e7490 100%);
+  --button-primary-hover: linear-gradient(135deg, #2dd4bf 0%, #0891b2 100%);
+  --button-secondary: var(--surface-elevated);
+  --button-secondary-hover: var(--surface-muted);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.25);
+  --shadow-md: 0 12px 32px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 20px 48px rgba(0, 0, 0, 0.45);
+  --shadow-soft: var(--shadow-sm);
+  --shadow-card: var(--shadow-md);
+  --overlay: rgba(0, 0, 0, 0.65);
+  --live-bg: #0b1018;
+  --live-panel: #141c28;
+  --live-panel-muted: #1a2433;
+  --live-text: #f1f5f9;
+  --live-text-muted: #94a3b8;
+  --live-border: rgba(148, 163, 184, 0.14);
+  --live-chip: rgba(255, 255, 255, 0.06);
+  --live-chip-hover: rgba(255, 255, 255, 0.1);
+  --live-floating: rgba(20, 28, 40, 0.96);
+  --gradient-hero: linear-gradient(135deg, #0f172a 0%, #0c4a6e 40%, #134e4a 100%);
+  --gradient-ai: linear-gradient(135deg, #4f46e5 0%, #0d9488 100%);
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html.theme-animate,
+html.theme-animate * {
+  transition-property: background-color, border-color, color, box-shadow;
+  transition-duration: 0.2s;
+  transition-timing-function: ease;
+}
+
+body {
+  margin: 0;
+  font-family: 'DM Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  color: var(--text-primary);
+  background-color: var(--background);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Syne', sans-serif;
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.mapboxgl-map {
+  width: 100%;
+  height: 100%;
+}
+
+@layer components {
+  .yolo-surface {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: 1.5rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .yolo-surface-glass {
+    background: var(--surface-glass);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 1.25rem;
+  }
+
+  .yolo-card {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .yolo-input {
+    @apply w-full rounded-2xl px-4 py-3;
+    background: var(--surface-elevated);
+    border: 1px solid var(--border-strong);
+    color: var(--text-primary);
+  }
+
+  .yolo-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px var(--brand-soft);
+    border-color: var(--brand-primary);
+  }
+
+  .yolo-input:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+  }
+
+  .yolo-input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .yolo-chip {
+    @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold;
+  }
+
+  .yolo-hero-overlay {
+    @apply absolute inset-0;
+    background: linear-gradient(to top, rgba(11, 18, 32, 0.92) 0%, rgba(11, 18, 32, 0.45) 45%, rgba(11, 18, 32, 0.12) 100%);
+  }
+
+  .yolo-card-hover {
+    @apply transition-all duration-300;
+  }
+
+  .yolo-card-hover:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card);
+  }
+
+  .yolo-label {
+    @apply text-[10px] uppercase tracking-[0.18em] font-semibold;
+    color: var(--text-muted);
+  }
+
+  .yolo-theme-toggle {
+    @apply h-9 w-9 rounded-full border flex items-center justify-center text-sm;
+    border-color: var(--border);
+    background: var(--surface-elevated);
+    color: var(--text-secondary);
+  }
+
+  .yolo-error-state {
+    border: 1px solid color-mix(in srgb, var(--error) 35%, transparent);
+    background: var(--error-soft);
+    color: var(--error);
+  }
+
+  .yolo-success-banner {
+    border: 1px solid color-mix(in srgb, var(--success) 35%, transparent);
+    background: var(--success-soft);
+    color: var(--success);
+  }
+
+  .yolo-btn-primary {
+    background: var(--button-primary);
+    box-shadow: var(--shadow-glow-teal);
+  }
+
+  .yolo-btn-primary:hover:not(:disabled) {
+    background: var(--button-primary-hover);
+  }
+
+  .yolo-widget {
+    background: var(--surface-elevated);
+    border: 1px solid var(--border);
+    border-radius: 1.25rem;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .yolo-section-gap {
+    @apply py-16 md:py-20;
+  }
+
+  .yolo-ai-glow {
+    box-shadow: var(--shadow-glow-ai);
+  }
+}
+
+.dark .mapboxgl-ctrl-group {
+  background: var(--surface-elevated) !important;
+  border-color: var(--border) !important;
+}
+
+.dark .mapboxgl-ctrl-group button {
+  filter: invert(0.85);
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
