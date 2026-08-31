@@ -1,4 +1,10 @@
-const API_BASE = '';
+/** Backend origin in production; empty in dev so Vite proxy handles /api fetch calls. */
+export const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
+
+/** Backend origin for full-page redirects (OAuth) — always targets the API host. */
+export function getApiOrigin() {
+  return API_BASE || import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'http://localhost:3001';
+}
 
 /**
  * Fetch helper with credentials for session cookies.

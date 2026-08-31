@@ -119,11 +119,12 @@ export async function invalidateAllUserSessions(userId) {
  * @returns {object}
  */
 export function getSessionCookieOptions(ttlMs = SESSION_TTL_MS) {
+  const isProduction = config.nodeEnv === 'production';
   return {
     path: '/',
     httpOnly: true,
-    secure: config.nodeEnv === 'production',
-    sameSite: 'lax',
+    secure: isProduction,
+    sameSite: isProduction ? 'none' : 'lax',
     maxAge: Math.floor(ttlMs / 1000),
   };
 }

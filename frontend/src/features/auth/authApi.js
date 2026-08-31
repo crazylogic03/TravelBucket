@@ -1,6 +1,4 @@
-import { apiFetch } from '@/services/api.js';
-
-const BACKEND_URL = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { apiFetch, getApiOrigin } from '@/services/api.js';
 
 export function getMe() {
   return apiFetch('/api/auth/me');
@@ -85,6 +83,6 @@ export function deleteAccount() {
  */
 export function startGoogleLogin(redirect = '/dashboard') {
   const safe = redirect?.startsWith('/trips/new') ? '/dashboard' : redirect || '/dashboard';
-  const url = `${BACKEND_URL}/api/auth/google?redirect=${encodeURIComponent(safe)}`;
+  const url = `${getApiOrigin()}/api/auth/google?redirect=${encodeURIComponent(safe)}`;
   window.location.href = url;
 }

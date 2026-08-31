@@ -1,0 +1,29 @@
+# Render Blueprint — YOLO Fastify backend (monorepo root)
+# Frontend stays on Vercel; database on Neon (or other managed Postgres).
+
+services:
+  - type: web
+    name: yolo-backend
+    runtime: node
+    plan: free
+    rootDir: .
+    buildCommand: npm install && npm run build:backend
+    startCommand: npm run start:backend
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        sync: false
+      - key: SESSION_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        sync: false
+      - key: MAPBOX_ACCESS_TOKEN
+        sync: false
+      - key: GROQ_API_KEY_1
+        sync: false
+      - key: OPENWEATHER_API_KEY
+        sync: false
+      - key: UNSPLASH_ACCESS_KEY
+        sync: false

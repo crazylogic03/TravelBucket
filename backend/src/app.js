@@ -29,9 +29,12 @@ export async function buildApp() {
     logger: {
       level: config.nodeEnv === 'production' ? 'info' : 'debug',
     },
+    trustProxy: config.nodeEnv === 'production',
   });
 
   app.decorate('prisma', getPrisma());
+
+  app.get('/health', async () => ({ status: 'ok' }));
 
   await app.register(cors, {
     origin: config.frontendUrl,
