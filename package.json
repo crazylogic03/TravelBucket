@@ -12,6 +12,9 @@
     "dev:frontend": "npm run dev -w frontend",
     "dev:backend": "npm run dev -w backend",
     "build": "npm run build -w frontend && npm run build -w backend",
+    "build:backend": "prisma generate && npm run build -w backend",
+    "start:backend": "npm run start -w backend",
+    "postinstall": "prisma generate",
     "lint": "npm run lint -w frontend && npm run lint -w backend",
     "format": "prettier --write \"**/*.{js,jsx,json,md,css}\"",
     "format:check": "prettier --check \"**/*.{js,jsx,json,md,css}\"",
@@ -28,8 +31,10 @@
     "@playwright/test": "^1.49.1",
     "concurrently": "^9.1.2",
     "prettier": "^3.4.2",
-    "prisma": "^6.3.1",
     "vitest": "^3.0.5"
+  },
+  "dependencies": {
+    "prisma": "^6.3.1"
   },
   "engines": {
     "node": ">=18"
