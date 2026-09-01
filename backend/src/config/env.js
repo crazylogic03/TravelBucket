@@ -31,7 +31,7 @@ export function loadConfig() {
     .map((n) => process.env[`GROQ_API_KEY_${n}`])
     .filter(Boolean);
 
-  const frontendUrl = (process.env.FRONTEND_URL || 'http://localhost:5173').replace(/\/$/, '');
+  const frontendUrl = (process.env.FRONTEND_URL || 'https://frontend-three-ivory-55.vercel.app').replace(/\/$/, '');
   const port = Number(process.env.PORT) || 3001;
 
   return {
@@ -46,7 +46,7 @@ export function loadConfig() {
       process.env.GOOGLE_REDIRECT_URI ||
       (process.env.NODE_ENV === 'production'
         ? ''
-        : `http://localhost:${port}/api/auth/google/callback`),
+        : `https://yolo-backend-t28z.onrender.com/api/auth/google/callback`),
     mapboxAccessToken: process.env.MAPBOX_ACCESS_TOKEN || '',
     openWeatherApiKey: process.env.OPENWEATHER_API_KEY || '',
     unsplashAccessKey: process.env.UNSPLASH_ACCESS_KEY || '',

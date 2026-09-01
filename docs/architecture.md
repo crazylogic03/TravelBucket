@@ -139,7 +139,7 @@ Wizard phases are defined in `frontend/src/layouts/WizardLayout.jsx`: **Where �
 All authenticated calls use `frontend/src/services/api.js`:
 
 - `fetch('/api/...', { credentials: 'include' })` — session cookie `yolo_session`
-- Vite dev proxy forwards `/api` → `http://localhost:3001`
+- Vite dev proxy forwards `/api` → `https://yolo-backend-t28z.onrender.com`
 - Errors throw with `error.message` from JSON body
 
 ### Key UI modules

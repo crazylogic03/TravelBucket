@@ -3,7 +3,7 @@ export const API_BASE = (import.meta.env.VITE_API_URL || '').replace(/\/$/, '');
 
 /** Backend origin for full-page redirects (OAuth) — always targets the API host. */
 export function getApiOrigin() {
-  return API_BASE || import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'http://localhost:3001';
+  return API_BASE || import.meta.env.VITE_API_URL?.replace(/\/$/, '') || 'https://yolo-backend-t28z.onrender.com';
 }
 
 /**
