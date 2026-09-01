@@ -77,7 +77,7 @@ export async function validateSession(token) {
 
   if (!session) return null;
   if (session.expiresAt < new Date()) {
-    await prisma.session.delete({ where: { id: session.id } }).catch(() => {});
+    await prisma.session.delete({ where: { id: session.id } }).catch(() => { });
     return null;
   }
 
@@ -86,7 +86,7 @@ export async function validateSession(token) {
       where: { id: session.id },
       data: { lastSeenAt: new Date() },
     })
-    .catch(() => {});
+    .catch(() => { });
 
   return { user: session.user, session };
 }
@@ -119,12 +119,11 @@ export async function invalidateAllUserSessions(userId) {
  * @returns {object}
  */
 export function getSessionCookieOptions(ttlMs = SESSION_TTL_MS) {
-  const isProduction = config.nodeEnv === 'production';
   return {
     path: '/',
     httpOnly: true,
-    secure: isProduction,
-    sameSite: isProduction ? 'none' : 'lax',
+    secure: true,
+    sameSite: 'none',
     maxAge: Math.floor(ttlMs / 1000),
   };
 }
